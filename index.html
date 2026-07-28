@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>מכתב בשבילך ♥</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gveret+Levin+AlefAlefAlef&family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --night:      #150b09;
+  --night-2:    #2a120f;
+  --ember:      #e9a15c;
+  --paper:      #f2e3c6;
+  --paper-2:    #e2caa0;
+  --ink:        #3b2318;
+  --wine:       #8e1a22;
+  --glow:       #ff2f45;
+  --gold:       #f6c98a;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+html,body{
+  height:100%;
+  overflow:hidden;
+  background:var(--night);
+  font-family:'Frank Ruhl Libre',Georgia,serif;
+  color:var(--paper);
+}
+
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(60% 45% at 50% 12%, rgba(233,161,92,.20), transparent 70%),
+    radial-gradient(70% 60% at 15% 85%, rgba(142,26,34,.28), transparent 70%),
+    radial-gradient(70% 60% at 90% 70%, rgba(142,26,34,.22), transparent 70%),
+    linear-gradient(180deg,#1d0f0c 0%, var(--night) 45%, #0e0605 100%);
+}
+
+.screen{
+  position:fixed;inset:0;z-index:2;
+  display:none;
+  align-items:center;justify-content:center;
+  padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom));
+  opacity:0;transition:opacity .7s ease;
+}
+.screen.is-on{display:flex;}
+.screen.is-visible{opacity:1;}
+.screen.is-scrollable{overflow-y:auto;align-items:flex-start;-webkit-overflow-scrolling:touch}
+
+.env-wrap{text-align:center;display:flex;flex-direction:column;align-items:center;gap:34px}
+
+.envelope{
+  position:relative;width:min(78vw,320px);aspect-ratio:1.55/1;
+  cursor:pointer;border:0;background:none;padding:0;
+  filter:drop-shadow(0 26px 48px rgba(0,0,0,.6));
+  animation:breathe 3.4s ease-in-out infinite;
+}
+@keyframes breathe{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-9px) scale(1.015)}}
+
+.env-body{
+  position:absolute;inset:0;border-radius:6px;
+  background:linear-gradient(160deg,var(--paper) 0%,var(--paper-2) 100%);
+  box-shadow:inset 0 -14px 26px rgba(90,50,25,.22);
+}
+.env-body::after{
+  content:"";position:absolute;inset:0;border-radius:6px;
+  background:
+    linear-gradient(to bottom left, transparent 49.6%, rgba(150,95,50,.16) 50%) right/50% 100% no-repeat,
+    linear-gradient(to bottom right, transparent 49.6%, rgba(150,95,50,.16) 50%) left/50% 100% no-repeat;
+}
+.env-flap{
+  position:absolute;top:0;left:0;right:0;height:62%;
+  background:linear-gradient(180deg,#f7ecd4,#dcc296);
+  clip-path:polygon(0 0,100% 0,50% 100%);
+  transform-origin:top center;transform:rotateX(0deg);
+  transition:transform .85s cubic-bezier(.6,-0.25,.35,1.2);
+  z-index:3;
+  box-shadow:0 6px 14px rgba(60,30,10,.25);
+}
+.envelope.is-open .env-flap{transform:rotateX(180deg);z-index:1}
+
+.seal{
+  position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);
+  width:70px;height:70px;border-radius:50%;z-index:4;
+  background:radial-gradient(circle at 34% 30%,#c8323c,#7d1119 65%,#4d080d);
+  box-shadow:0 6px 16px rgba(0,0,0,.55), inset 0 -3px 8px rgba(0,0,0,.45);
+  display:grid;place-items:center;font-size:28px;color:#ffd9d9;
+  transition:transform .45s ease,opacity .45s ease;
+}
+.envelope.is-open .seal{transform:translate(-50%,-50%) scale(.2) rotate(-40deg);opacity:0}
+
+.env-note{
+  position:absolute;left:8%;right:8%;top:16%;height:74%;z-index:2;
+  background:linear-gradient(180deg,#fdf6e6,#f0dfbe);
+  border-radius:4px;box-shadow:0 -8px 22px rgba(0,0,0,.35);
+  transform:translateY(0);opacity:0;
+  transition:transform .8s cubic-bezier(.2,.9,.25,1) .25s,opacity .35s ease .25s;
+}
+.envelope.is-open .env-note{transform:translateY(-58%);opacity:1}
+
+.env-title{
+  font-family:'Gveret Levin AlefAlefAlef',cursive;
+  font-size:clamp(38px,11vw,58px);line-height:1.1;color:var(--gold);
+  text-shadow:0 0 26px rgba(233,161,92,.45);
+}
+.env-hint{
+  font-family:'Heebo',sans-serif;font-weight:300;letter-spacing:.06em;
+  font-size:15px;color:#e7c9a8;opacity:.9;
+  animation:pulse 2.6s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+
+.letter{
+  width:min(100%,470px);margin:0 auto;padding:8px 0 40px;
+  display:flex;flex-direction:column;align-items:center;
+}
+
+.photo{
+  position:relative;width:100%;aspect-ratio:880/675;overflow:hidden;border-radius:10px;
+}
+.photo img{width:100%;height:100%;object-fit:cover;object-position:50% 45%;display:block;
+  filter:saturate(1.06) contrast(1.06) brightness(.94) sepia(.10);
+  -webkit-mask-image:linear-gradient(180deg,#000 55%,transparent 99%);
+          mask-image:linear-gradient(180deg,#000 55%,transparent 99%);
+}
+.photo::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(65% 62% at 50% 38%, transparent 22%, rgba(38,12,7,.72) 100%),
+    linear-gradient(180deg, rgba(120,45,20,.28), transparent 45%);
+}
+.photo.is-empty{background:linear-gradient(150deg,#3a1d16,#1c0d0a);}
+.photo.is-empty::before{
+  content:"הכניסו כאן את התמונה שלכם  ·  photo.jpg";
+  position:absolute;inset:0;display:grid;place-items:center;text-align:center;
+  font-family:'Heebo',sans-serif;font-size:13px;color:#c99a72;padding:24px;
+}
+
+.name{
+  font-family:'Gveret Levin AlefAlefAlef',cursive;
+  font-size:clamp(52px,16vw,86px);line-height:.95;color:#fff1e2;
+  margin-top:-16%;position:relative;z-index:2;
+  text-shadow:0 0 30px rgba(255,120,90,.55),0 4px 18px rgba(0,0,0,.7);
+}
+.name-rule{
+  display:flex;align-items:center;gap:12px;width:74%;margin:10px 0 26px;
+  color:var(--glow);position:relative;z-index:2;
+}
+.name-rule::before,.name-rule::after{
+  content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(255,90,90,.85),transparent);
+}
+.name-rule span{font-size:14px;filter:drop-shadow(0 0 6px rgba(255,60,60,.9))}
+
+.paper{
+  position:relative;width:100%;padding:34px 26px 30px;color:var(--ink);
+  font-size:17px;line-height:1.95;text-align:center;
+}
+.paper::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:
+    radial-gradient(60% 40% at 25% 10%, rgba(255,255,255,.5), transparent 60%),
+    radial-gradient(50% 40% at 80% 90%, rgba(160,110,60,.25), transparent 60%),
+    linear-gradient(150deg,#f6e8ce 0%,#ecd9b4 48%,#e0c99e 100%);
+  box-shadow:0 22px 50px rgba(0,0,0,.55);
+  filter:url(#torn);
+}
+.paper p{margin:0 0 4px}
+.paper .gap{height:18px}
+.paper b,.paper strong{font-weight:900}
+.paper .hl{color:var(--wine);font-weight:900}
+
+.divider{color:var(--wine);opacity:.6;font-size:15px;margin:16px 0;position:relative}
+.divider::before,.divider::after{
+  content:"";position:absolute;top:50%;width:32%;height:1px;background:rgba(90,45,25,.35);
+}
+.divider::before{right:6%}.divider::after{left:6%}
+
+.signoff{
+  font-family:'Gveret Levin AlefAlefAlef',cursive;
+  color:var(--wine);font-size:26px;margin-top:22px;line-height:1.3;
+}
+.signature{
+  font-family:'Heebo',sans-serif;font-size:15px;color:#6b432c;margin-top:6px;letter-spacing:.04em;
+}
+.footnote{
+  font-family:'Heebo',sans-serif;font-weight:300;font-size:12.5px;line-height:1.7;
+  color:#7a5238;margin-top:20px;padding-top:16px;border-top:1px solid rgba(90,45,25,.25);
+}
+
+.choices{display:flex;gap:14px;width:100%;margin-top:30px}
+.yes{
+  flex:1;position:relative;border:0;cursor:pointer;
+  padding:16px 10px;border-radius:999px;
+  font-family:'Frank Ruhl Libre',serif;font-weight:900;font-size:26px;color:#fff;
+  background:linear-gradient(180deg,#e0323f,#8d1017);
+  box-shadow:0 0 0 1px rgba(255,150,150,.55) inset,0 0 26px rgba(255,45,60,.45),0 10px 22px rgba(0,0,0,.5);
+  text-shadow:0 2px 6px rgba(0,0,0,.5);
+  transition:transform .18s ease,box-shadow .25s ease;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.yes::after{content:"♥";font-size:20px;opacity:.85}
+.yes:hover{transform:translateY(-3px);box-shadow:0 0 0 1px rgba(255,180,180,.7) inset,0 0 40px rgba(255,45,60,.7),0 14px 26px rgba(0,0,0,.55)}
+.yes:active{transform:translateY(1px) scale(.98)}
+.yes:focus-visible{outline:3px solid var(--gold);outline-offset:4px}
+
+.end-mark{margin-top:26px;color:var(--glow);opacity:.7;font-size:14px}
+
+#screen-final{background:rgba(12,5,4,.55);backdrop-filter:blur(9px)}
+.final-card{
+  width:min(92vw,400px);padding:44px 28px;text-align:center;
+  background:linear-gradient(150deg,#f6e8ce,#e2c99c);
+  border-radius:18px;color:var(--ink);
+  box-shadow:0 30px 70px rgba(0,0,0,.65),0 0 0 1px rgba(255,255,255,.35) inset;
+  transform:scale(.82);opacity:0;transition:transform .55s cubic-bezier(.2,1.4,.4,1),opacity .45s ease;
+}
+#screen-final.is-visible .final-card{transform:scale(1);opacity:1}
+.final-heart{font-size:54px;color:var(--glow);animation:beat 1.15s ease-in-out infinite;display:inline-block}
+@keyframes beat{0%,100%{transform:scale(1)}18%{transform:scale(1.22)}36%{transform:scale(1)}54%{transform:scale(1.16)}}
+.final-text{
+  font-family:'Gveret Levin AlefAlefAlef',cursive;
+  font-size:clamp(28px,7.6vw,38px);line-height:1.45;color:var(--wine);margin-top:14px;
+}
+.again{
+  margin-top:28px;background:none;border:1px solid rgba(90,45,25,.4);border-radius:999px;
+  padding:9px 22px;font-family:'Heebo',sans-serif;font-size:14px;color:#6b432c;cursor:pointer;
+  transition:background .2s ease;
+}
+.again:hover{background:rgba(90,45,25,.08)}
+
+.particles{position:fixed;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.p{position:absolute;bottom:-8%;color:var(--glow);opacity:0;animation:rise linear infinite}
+.p.b{color:var(--ember);filter:blur(2.5px)}
+@keyframes rise{
+  0%{transform:translateY(0) scale(.6) rotate(0);opacity:0}
+  12%{opacity:.85}
+  85%{opacity:.5}
+  100%{transform:translateY(-112vh) scale(1.05) rotate(22deg);opacity:0}
+}
+.burst{position:fixed;z-index:60;pointer-events:none;font-size:22px;animation:burst .95s ease-out forwards}
+@keyframes burst{
+  0%{transform:translate(0,0) scale(.4);opacity:1}
+  100%{transform:translate(var(--dx),var(--dy)) scale(1.25);opacity:0}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.15s!important}
+}
+@media (max-width:360px){ .paper{font-size:15.5px;padding:28px 18px} .yes{font-size:22px} }
+</style>
+</head>
+
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="torn">
+    <feTurbulence type="fractalNoise" baseFrequency="0.022" numOctaves="4" result="n"/>
+    <feDisplacementMap in="SourceGraphic" in2="n" scale="11" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div class="particles" id="particles" aria-hidden="true"></div>
+
+<section class="screen" id="screen-envelope" aria-label="מעטפה">
+  <div class="env-wrap">
+    <h1 class="env-title" id="cover-title"></h1>
+    <button class="envelope" id="envelope" aria-label="פתיחת המכתב">
+      <div class="env-body"></div>
+      <div class="env-note"></div>
+      <div class="env-flap"></div>
+      <div class="seal">♥</div>
+    </button>
+    <p class="env-hint" id="cover-hint"></p>
+  </div>
+</section>
+
+<section class="screen is-scrollable" id="screen-letter" aria-label="המכתב">
+  <div class="letter">
+
+    <div class="photo" id="photo">
+      <img id="photo-img" alt="">
+    </div>
+
+    <h2 class="name" id="name"></h2>
+    <div class="name-rule"><span>♥</span></div>
+
+    <article class="paper" id="paper"></article>
+
+    <div class="choices">
+      <button class="yes" data-yes>כן</button>
+      <button class="yes" data-yes>כן</button>
+    </div>
+
+    <div class="end-mark">♥ ─────── ♥ ─────── ♥</div>
+  </div>
+</section>
+
+<section class="screen" id="screen-final" aria-label="הודעה">
+  <div class="final-card" role="dialog" aria-live="polite">
+    <span class="final-heart">♥</span>
+    <p class="final-text" id="final-text"></p>
+    <button class="again" id="again">לקרוא את המכתב שוב</button>
+  </div>
+</section>
+
+<script>
+/* ====== כל הטקסטים נמצאים כאן — זה המקום היחיד שצריך לערוך ====== */
+const CONFIG = {
+
+  coverTitle: "הגיע אלייך מכתב",
+  coverHint:  "לחצי על המעטפה כדי לפתוח ♥",
+
+  photo: "photo.jpg",            // שם קובץ התמונה שהעלית לריפו
+  name:  "לנויקה",
+
+  body: `
+    <p>הפעם קיבלת מכתב בצורה שונה! הוא לא מופיע במשרדך,</p>
+    <p>אלא באתר אינטרנטי במיוחד בשבילך!</p>
+
+    <div class="divider">♥</div>
+
+    <p>קיבלת את הקישור לאתר זה בערב ט"ו באב (שלישי)</p>
+    <p>או בט"ו באב (רביעי) עדיין לא החלטתי כי לא באלי שתתבאסי</p>
+    <p>ותחשבי שאנחנו לא נעשה כלום......</p>
+
+    <div class="gap"></div>
+
+    <p>אבל ככה! לאור העובדה שאנחנו ביום רביעי לא <b>יחד מכיוון</b></p>
+    <p>שאת בצבא, ביום חמישי אנחנו גם לא יחד ............ואז</p>
+    <p>מגיע שישי! ואנחנו ביחד עד ראשון! המון זמן לכייף</p>
+    <p>ולהגות עם <span class="hl">אהובתי</span></p>
+
+    <div class="divider">♥</div>
+
+    <p>אז מה בתוכנית? כמו שאת יודעת ביום שישי אראה אותך</p>
+    <p>ואנשק אותך, לאחר מכן ארוחת שישי עם המשפחה ואז</p>
+    <p>הסרט של ספיידרמן שסגרת לנו!</p>
+
+    <div class="gap"></div>
+
+    <p>ואז שבת, מעבירים את היום בכיף ובערב יום שבת</p>
+    <p>בשעה 20:30 – יש לנו תור למסעדה אסייתית טובה</p>
+    <p>טובה במודיעין.</p>
+  `,
+
+  signoff:  "מחכה לראותך מאוד ואוהב ♥",
+  signature:"-אגם איסקוב-",
+  footnote: `*תאשרי הגעה בבקשה לכל האירועים הנ"ל בכפתור ה"כן"<br>
+             ובהודעה נפרדת בוואצאפ אל המשתמש "אגם איסקוב"`,
+
+  finalText: "אוהב אותך, ידעתי שתבחרי בכן 😉"
+};
+/* ========================= סוף אזור העריכה ========================= */
+
+const $ = id => document.getElementById(id);
+$('cover-title').textContent = CONFIG.coverTitle;
+$('cover-hint').textContent  = CONFIG.coverHint;
+$('name').textContent        = CONFIG.name;
+$('final-text').textContent  = CONFIG.finalText;
+$('paper').innerHTML = CONFIG.body
+  + `<p class="signoff">${CONFIG.signoff}</p>`
+  + `<p class="signature">${CONFIG.signature}</p>`
+  + `<p class="footnote">${CONFIG.footnote}</p>`;
+
+const img = $('photo-img');
+img.src = CONFIG.photo;
+img.alt = CONFIG.name;
+img.addEventListener('error', () => { $('photo').classList.add('is-empty'); img.remove(); });
+
+let current = null;
+function show(id){
+  const next = $(id);
+  if (current === next) return;
+  if (current){
+    const prev = current;
+    prev.classList.remove('is-visible');
+    setTimeout(() => prev.classList.remove('is-on'), 700);
+  }
+  next.classList.add('is-on');
+  next.scrollTop = 0;
+  requestAnimationFrame(() => requestAnimationFrame(() => next.classList.add('is-visible')));
+  current = next;
+}
+show('screen-envelope');
+
+const envelope = $('envelope');
+let opened = false;
+envelope.addEventListener('click', () => {
+  if (opened) return;
+  opened = true;
+  envelope.classList.add('is-open');
+  hearts(envelope, 16);
+  setTimeout(() => show('screen-letter'), 1250);
+});
+
+document.querySelectorAll('[data-yes]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    hearts(btn, 22);
+    setTimeout(() => show('screen-final'), 380);
+  });
+});
+
+$('again').addEventListener('click', () => show('screen-letter'));
+
+function hearts(source, count){
+  const r = source.getBoundingClientRect();
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
+  for (let i = 0; i < count; i++){
+    const s = document.createElement('span');
+    s.className = 'burst';
+    s.textContent = Math.random() > .35 ? '♥' : '♡';
+    const a = Math.random() * Math.PI * 2, d = 70 + Math.random() * 190;
+    s.style.left = cx + 'px';
+    s.style.top  = cy + 'px';
+    s.style.setProperty('--dx', Math.cos(a) * d + 'px');
+    s.style.setProperty('--dy', Math.sin(a) * d - 40 + 'px');
+    s.style.color = Math.random() > .5 ? '#ff2f45' : '#f6c98a';
+    s.style.fontSize = (14 + Math.random() * 22) + 'px';
+    document.body.appendChild(s);
+    setTimeout(() => s.remove(), 1000);
+  }
+}
+
+(function ambient(){
+  const box = $('particles');
+  const n = window.innerWidth < 500 ? 22 : 34;
+  for (let i = 0; i < n; i++){
+    const p = document.createElement('span');
+    const blurry = Math.random() > .45;
+    p.className = 'p' + (blurry ? ' b' : '');
+    p.textContent = blurry ? '●' : (Math.random() > .5 ? '♥' : '♡');
+    p.style.left = Math.random() * 100 + '%';
+    p.style.fontSize = (blurry ? 5 + Math.random() * 12 : 9 + Math.random() * 15) + 'px';
+    p.style.animationDuration = (14 + Math.random() * 18) + 's';
+    p.style.animationDelay = (-Math.random() * 26) + 's';
+    box.appendChild(p);
+  }
+})();
+</script>
+</body>
+</html>
